@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyNetQ.MetaData.Example.M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyNetQ.MetaData.Example.Producer", "EasyNetQ.MetaData.Example.Producer\EasyNetQ.MetaData.Example.Producer.csproj", "{F7885D9E-3691-43B4-AC20-465AE08C8DF8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyNetQ.MetaData.Example.Consumer", "EasyNetQ.MetaData.Example.Consumer\EasyNetQ.MetaData.Example.Consumer.csproj", "{65784159-0874-45C5-ADA9-5888300D683A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{F7885D9E-3691-43B4-AC20-465AE08C8DF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7885D9E-3691-43B4-AC20-465AE08C8DF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7885D9E-3691-43B4-AC20-465AE08C8DF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65784159-0874-45C5-ADA9-5888300D683A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65784159-0874-45C5-ADA9-5888300D683A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65784159-0874-45C5-ADA9-5888300D683A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65784159-0874-45C5-ADA9-5888300D683A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,5 +49,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{54C088D7-5088-4758-9B19-297322D697D3} = {72FE1A3C-A6D9-43F8-B18C-4E9096255496}
 		{F7885D9E-3691-43B4-AC20-465AE08C8DF8} = {72FE1A3C-A6D9-43F8-B18C-4E9096255496}
+		{65784159-0874-45C5-ADA9-5888300D683A} = {72FE1A3C-A6D9-43F8-B18C-4E9096255496}
 	EndGlobalSection
 EndGlobal

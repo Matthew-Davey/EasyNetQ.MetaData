@@ -42,6 +42,8 @@ nugets_pack :package => [:build] do |nuget|
     meta.version = ENV['NUGET_VERSION']
     meta.authors = 'Matt Davey'
     meta.description = 'An extension to EasyNetQ that allows you to utilize message headers, without resorting to AdvancedBus!'
+    meta.project_url = 'https://github.com/Matthew-Davey/EasyNetQ.MetaData'
+    meta.tags = 'amqp rabbitmq easynetq header'
   end
   nuget.with_package do |pkg|
     docFile = "EasyNetQ.MetaData/bin/#{build_configuration}/EasyNetQ.MetaData.XML"

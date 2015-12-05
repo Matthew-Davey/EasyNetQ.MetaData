@@ -1,7 +1,7 @@
 # EasyNetQ.MetaData
 An extension to EasyNetQ that allows you to utilize message headers, without resorting to AdvancedBus! Even works with AutoSubscriber.
 
-# Getting Started
+### Getting Started
 * Install the latest version of EasyNetQ.MetaData from NuGet - `Install-Package EasyNetQ.MetaData`
 * Decorate the properties on your message POCO which you would like to bind to message headers
 ```csharp
@@ -33,15 +33,15 @@ Your properties can be of any type which is convertible to and from **string**. 
 
 \* _You will need a reference to `System.Runtime.Serialization`. I wish I could be really clever and make MessageHeaderAttribute extend IgnoreDataMemberAttribute, alas it is **sealed** :(_
 
-\*\* _In theory this should all still work even if you have swapped out the default JsonSerializer for something more fancy._
+\*\* _In theory this should all still work even if you have swapped out the default JsonSerializer for something more fancy (or less fancy, like XML)._
 
-# Building from source
+### Building from source
 ```
 bundler install
 bundle exec rake build [configuration=Debug|Release]
 ```
 
-# Roadmap
+### Roadmap
 * Special handling of DateTime objects. Currently these are serialized to the message header in **local** format. It would be preferable to serialize them in ISO-8601 format, or as unix timestamps.
 * Support binding public fields in addition to properties (is there demand for this?).
 * Support binding to AMQP message properties.

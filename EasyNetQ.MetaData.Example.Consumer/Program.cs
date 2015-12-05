@@ -5,8 +5,10 @@
 
     class Program {
         static void Main() {
-            var bus = RabbitHutch.CreateBus("host=localhost;username=guest;password=guest", registrar =>
-                registrar.Register<IEasyNetQLogger>(_ => new ConsoleLogger()));
+            var bus = RabbitHutch.CreateBus("host=localhost;username=guest;password=guest", registrar => registrar
+                .Register<IEasyNetQLogger>(_ => new ConsoleLogger())
+                .EnableMessageMetaDataBinding()
+            );
 
             Console.CancelKeyPress += (sender, eventArgs) => bus.Dispose();
 

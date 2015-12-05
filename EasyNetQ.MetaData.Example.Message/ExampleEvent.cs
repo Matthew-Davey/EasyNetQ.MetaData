@@ -1,9 +1,11 @@
-﻿using System;
+﻿namespace EasyNetQ.MetaData.Example.Message {
+    using System;
+    using System.Runtime.Serialization;
 
-namespace EasyNetQ.MetaData.Example.Message {
     public class ExampleEvent {
         public String MessageContent { get; set; }
 
+        [IgnoreDataMember]
         [MessageHeader("header_value")]
         public String HeaderValue { get; set; }
     }

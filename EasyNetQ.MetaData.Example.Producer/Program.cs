@@ -8,9 +8,11 @@
 
     class Program {
         static void Main() {
-            var bus = RabbitHutch.CreateBus("host=localhost;username=guest;password=guest", registrar =>
-                registrar.Register<IEasyNetQLogger>(_ => new ConsoleLogger()));
-            
+            var bus = RabbitHutch.CreateBus("host=localhost;username=guest;password=guest", registrar => registrar
+                .Register<IEasyNetQLogger>(_ => new ConsoleLogger())
+                .EnableMessageMetaDataBinding()
+            );
+
             var cancellationTokenSource = new CancellationTokenSource();
 
             Console.CancelKeyPress += (sender, eventArgs) => {
@@ -21,7 +23,7 @@
             while (!cancellationTokenSource.IsCancellationRequested) {
                 bus.Publish(new ExampleEvent {
                     MessageContent = "Message Content",
-                    HeaderValue = "Header Value"
+                    HeaderValue    = "Header Value"
                 });
 
                 Task.Delay(1000).Wait();

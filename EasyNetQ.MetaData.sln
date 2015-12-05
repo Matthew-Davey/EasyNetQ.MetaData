@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyNetQ.MetaData", "EasyNetQ.MetaData\EasyNetQ.MetaData.csproj", "{B091FC31-0542-41A5-8384-8169D6C55F37}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6926AD58-C567-4C58-AB89-CFD9F28F1346}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{72FE1A3C-A6D9-43F8-B18C-4E9096255496}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyNetQ.MetaData.Example.Message", "EasyNetQ.MetaData.Example.Message\EasyNetQ.MetaData.Example.Message.csproj", "{54C088D7-5088-4758-9B19-297322D697D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyNetQ.MetaData.Example.Producer", "EasyNetQ.MetaData.Example.Producer\EasyNetQ.MetaData.Example.Producer.csproj", "{F7885D9E-3691-43B4-AC20-465AE08C8DF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyNetQ.MetaData.Example.Consumer", "EasyNetQ.MetaData.Example.Consumer\EasyNetQ.MetaData.Example.Consumer.csproj", "{65784159-0874-45C5-ADA9-5888300D683A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B091FC31-0542-41A5-8384-8169D6C55F37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B091FC31-0542-41A5-8384-8169D6C55F37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B091FC31-0542-41A5-8384-8169D6C55F37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B091FC31-0542-41A5-8384-8169D6C55F37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54C088D7-5088-4758-9B19-297322D697D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54C088D7-5088-4758-9B19-297322D697D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54C088D7-5088-4758-9B19-297322D697D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54C088D7-5088-4758-9B19-297322D697D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7885D9E-3691-43B4-AC20-465AE08C8DF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7885D9E-3691-43B4-AC20-465AE08C8DF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7885D9E-3691-43B4-AC20-465AE08C8DF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7885D9E-3691-43B4-AC20-465AE08C8DF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65784159-0874-45C5-ADA9-5888300D683A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65784159-0874-45C5-ADA9-5888300D683A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65784159-0874-45C5-ADA9-5888300D683A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65784159-0874-45C5-ADA9-5888300D683A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{54C088D7-5088-4758-9B19-297322D697D3} = {72FE1A3C-A6D9-43F8-B18C-4E9096255496}
+		{F7885D9E-3691-43B4-AC20-465AE08C8DF8} = {72FE1A3C-A6D9-43F8-B18C-4E9096255496}
+		{65784159-0874-45C5-ADA9-5888300D683A} = {72FE1A3C-A6D9-43F8-B18C-4E9096255496}
+	EndGlobalSection
+EndGlobal

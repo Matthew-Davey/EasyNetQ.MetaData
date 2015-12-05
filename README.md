@@ -1,7 +1,7 @@
 # EasyNetQ.MetaData
 An extension to EasyNetQ that allows you to utilize message headers, without resorting to AdvancedBus! Even works with AutoSubscriber.
 
-[![Build Status](https://travis-ci.org/Matthew-Davey/EasyNetQ.MetaData.svg?branch=develop)](https://travis-ci.org/Matthew-Davey/EasyNetQ.MetaData)
+[![Build Status](https://travis-ci.org/Matthew-Davey/EasyNetQ.MetaData.svg?branch=develop)](https://travis-ci.org/Matthew-Davey/EasyNetQ.MetaData) [![Nuget Downloads](https://img.shields.io/nuget/dt/EasyNetQ.MetaData.svg)](https://www.nuget.org/packages/EasyNetQ.MetaData/) [![Nuget Version](https://img.shields.io/nuget/v/EasyNetQ.MetaData.svg)](https://www.nuget.org/packages/EasyNetQ.MetaData/)
 
 ### Getting Started
 * Install the latest version of EasyNetQ.MetaData from NuGet - `Install-Package EasyNetQ.MetaData`

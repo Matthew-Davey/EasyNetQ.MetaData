@@ -1,0 +1,6 @@
+language: csharp
+solution: EasyNetQ.MetaData.sln
+install:
+    - bundle install
+script:
+    - bundle exec rake build configuration=Release

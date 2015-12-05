@@ -1,6 +1,8 @@
 # EasyNetQ.MetaData
 An extension to EasyNetQ that allows you to utilize message headers, without resorting to AdvancedBus! Even works with AutoSubscriber.
 
+[![Build Status](https://travis-ci.org/Matthew-Davey/EasyNetQ.MetaData.svg?branch=develop)](https://travis-ci.org/Matthew-Davey/EasyNetQ.MetaData)
+
 ### Getting Started
 * Install the latest version of EasyNetQ.MetaData from NuGet - `Install-Package EasyNetQ.MetaData`
 * Decorate the properties on your message POCO which you would like to bind to message headers

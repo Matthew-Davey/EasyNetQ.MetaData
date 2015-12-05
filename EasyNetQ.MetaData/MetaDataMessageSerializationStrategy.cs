@@ -68,7 +68,7 @@
             var boundProperties = ScanForBoundProperties(messageType);
 
             // There is a special case when only one message header is defined - the singular header value will be
-            // accessable using the key "header_value" rather than the original header key...
+            // accessible using the key "header_value" rather than the original header key...
             if (boundProperties.Count() == 1) {
                 var boundProperty = boundProperties.Single();
                 var headerValue = GetHeaderValue(headers, "header_value");
@@ -100,7 +100,7 @@
             var typeConverter = TypeDescriptor.GetConverter(boundProperty.PropertyType);
             var propertyValue = boundProperty.GetValue(message);
 
-            return typeConverter.ConvertToString(propertyValue);
+            return typeConverter.ConvertToInvariantString(propertyValue);
         }
 
         private static String GetHeaderValue(IDictionary<String, Object> headers, String key) {
@@ -110,7 +110,7 @@
 
         private static void BindHeaderValue(PropertyInfo boundProperty, Object message, String headerValue) {
             var typeConverter = TypeDescriptor.GetConverter(boundProperty.PropertyType);
-            var propertyValue = typeConverter.ConvertFromString(headerValue);
+            var propertyValue = typeConverter.ConvertFromInvariantString(headerValue);
 
             boundProperty.SetValue(message, propertyValue);
         }

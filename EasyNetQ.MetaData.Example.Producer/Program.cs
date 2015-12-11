@@ -23,7 +23,8 @@
             while (!cancellationTokenSource.IsCancellationRequested) {
                 bus.Publish(new ExampleEvent {
                     MessageContent = "Message Content",
-                    HeaderValue    = "Header Value"
+                    HeaderValue    = "Header Value",
+                    Timestamp      = DateTimeOffset.UtcNow
                 });
 
                 Task.Delay(1000).Wait();

@@ -31,7 +31,8 @@
                     DeliveryMode      = 1, // Non-persistent
                     Priority          = 1,
                     CorrelationId     = Guid.NewGuid(),
-                    ReplyTo           = "Response Queue"
+                    ReplyTo           = "Response Queue",
+                    Expiration        = TimeSpan.FromSeconds(30)
                 });
 
                 Task.Delay(1000).Wait();

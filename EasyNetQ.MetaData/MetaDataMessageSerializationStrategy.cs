@@ -105,6 +105,9 @@
                     case Property.ReplyTo:
                         yield return new ReplyToBinding { BoundProperty = property };
                         break;
+                    case Property.Expiration:
+                        yield return new ExpirationBinding { BoundProperty = property };
+                        break;
                 }
             }
         }

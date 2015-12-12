@@ -49,6 +49,7 @@
     <Compile Include="Bindings\ContentTypeBinding.cs" />
     <Compile Include="Bindings\CorrelationIdBinding.cs" />
     <Compile Include="Bindings\DeliveryModeBinding.cs" />
+    <Compile Include="Bindings\ExpirationBinding.cs" />
     <Compile Include="Bindings\HeaderBinding.cs" />
     <Compile Include="Bindings\PriorityBinding.cs" />
     <Compile Include="Bindings\ReplyToBinding.cs" />

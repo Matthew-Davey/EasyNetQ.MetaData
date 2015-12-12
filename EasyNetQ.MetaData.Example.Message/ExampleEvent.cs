@@ -28,5 +28,8 @@
 
         [MessageProperty(Property.ReplyTo), IgnoreDataMember]
         public String ReplyTo { get; set; }
+
+        [MessageProperty(Property.Expiration), IgnoreDataMember]
+        public TimeSpan Expiration { get; set; }
     }
 }

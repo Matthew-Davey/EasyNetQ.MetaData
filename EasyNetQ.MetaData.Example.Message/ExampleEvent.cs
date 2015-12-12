@@ -5,7 +5,7 @@
     public class ExampleEvent {
         public String MessageContent { get; set; }
 
-        [MessageHeader("header_value"), IgnoreDataMember]
+        [MessageHeader("my_custom_header"), IgnoreDataMember]
         public String HeaderValue { get; set; }
 
         [MessageProperty(Property.Timestamp), IgnoreDataMember]

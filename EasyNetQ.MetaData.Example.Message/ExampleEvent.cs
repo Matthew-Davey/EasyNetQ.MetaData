@@ -6,9 +6,9 @@
         public String MessageContent { get; set; }
 
         [MessageHeader("my_custom_header"), IgnoreDataMember]
-        public String HeaderValue { get; set; }
+        public String CustomHeaderValue { get; set; }
 
         [MessageProperty(Property.Timestamp), IgnoreDataMember]
-        public DateTimeOffset Timestamp { get; set; }
+        public DateTime Timestamp { get; set; }
     }
 }

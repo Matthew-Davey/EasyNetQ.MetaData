@@ -22,9 +22,9 @@
 
             while (!cancellationTokenSource.IsCancellationRequested) {
                 bus.Publish(new ExampleEvent {
-                    MessageContent = "Message Content",
-                    HeaderValue    = "Header Value",
-                    Timestamp      = DateTimeOffset.UtcNow
+                    MessageContent    = "Message Content",
+                    CustomHeaderValue = "My Header Value",
+                    Timestamp         = DateTime.UtcNow
                 });
 
                 Task.Delay(1000).Wait();

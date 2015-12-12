@@ -13,7 +13,8 @@
             Console.CancelKeyPress += (sender, eventArgs) => bus.Dispose();
 
             bus.Subscribe<ExampleEvent>(String.Empty, message => {
-                // Intentionally empty...
+                Console.WriteLine("Custom Header Value:\t {0}", message.CustomHeaderValue);
+                Console.WriteLine("Message Timestamp:\t {0}", message.Timestamp);
             });
         }
     }

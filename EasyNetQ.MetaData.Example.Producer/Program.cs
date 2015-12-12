@@ -29,7 +29,8 @@
                     ContentEncoding   = Encoding.UTF8.WebName,
                     Timestamp         = DateTime.UtcNow,
                     DeliveryMode      = 1, // Non-persistent
-                    Priority          = 1
+                    Priority          = 1,
+                    CorrelationId     = Guid.NewGuid()
                 });
 
                 Task.Delay(1000).Wait();

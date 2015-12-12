@@ -22,5 +22,8 @@
 
         [MessageProperty(Property.Priority), IgnoreDataMember]
         public Byte Priority { get; set; }
+
+        [MessageProperty(Property.CorrelationId), IgnoreDataMember]
+        public Guid CorrelationId { get; set; }
     }
 }

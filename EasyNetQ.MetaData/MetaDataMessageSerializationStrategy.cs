@@ -99,6 +99,9 @@
                     case Property.Priority:
                         yield return new PriorityBinding { BoundProperty = property };
                         break;
+                    case Property.CorrelationId:
+                        yield return new CorrelationIdBinding { BoundProperty = property };
+                        break;
                 }
             }
         }

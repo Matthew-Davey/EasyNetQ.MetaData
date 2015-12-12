@@ -2,6 +2,7 @@
     using System;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Text;
     using EasyNetQ;
     using EasyNetQ.Loggers;
     using EasyNetQ.MetaData.Example.Message;
@@ -22,8 +23,17 @@
 
             while (!cancellationTokenSource.IsCancellationRequested) {
                 bus.Publish(new ExampleEvent {
-                    MessageContent = "Message Content",
-                    HeaderValue    = "Header Value"
+                    MessageContent    = "Message Content",
+                    CustomHeaderValue = "My Header Value",
+                    ContentType       = "application/json",
+                    ContentEncoding   = Encoding.UTF8.WebName,
+                    Timestamp         = DateTime.UtcNow,
+                    DeliveryMode      = 1, // Non-persistent
+                    Priority          = 1,
+                    CorrelationId     = Guid.NewGuid(),
+                    ReplyTo           = "Response Queue",
+                    Expiration        = TimeSpan.FromSeconds(30),
+                    MessageId         = Guid.NewGuid()
                 });
 
                 Task.Delay(1000).Wait();

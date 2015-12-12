@@ -1,10 +1,9 @@
 ﻿namespace EasyNetQ.MetaData {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Linq;
     using System.Reflection;
-    using System.Text;
+    using EasyNetQ.MetaData.Bindings;
 
     internal class MetaDataMessageSerializationStrategy : IMessageSerializationStrategy {
         private readonly ITypeNameSerializer _typeNameSerializer;
@@ -30,7 +29,8 @@
             var messageType = _typeNameSerializer.DeSerialize(properties.Type);
             var messageBody = _serializer.BytesToMessage(properties.Type, body);
 
-            BindHeaderValues(messageType, messageBody, properties.Headers);
+            ScanForBindings(messageType)
+                .ForEach(binding => binding.FromMessageMetaData(properties, messageBody));
 
             return MessageFactory.CreateInstance(messageType, messageBody, properties);
         }
@@ -38,7 +38,8 @@
         public IMessage<T> DeserializeMessage<T>(MessageProperties properties, Byte[] body) where T : class {
             var messageBody = _serializer.BytesToMessage<T>(body);
 
-            BindHeaderValues(typeof(T), messageBody, properties.Headers);
+            ScanForBindings(typeof(T))
+                .ForEach(binding => binding.FromMessageMetaData(properties, messageBody));
 
             return new Message<T>(messageBody, properties);
         }
@@ -47,13 +48,10 @@
             var messageBody = message.GetBody();
             var messageProperties = message.Properties;
 
-            var boundProperties = ScanForBoundProperties(message.MessageType);
-            if (boundProperties.Any()) {
-                messageProperties.HeadersPresent = true;
-                messageProperties.Headers =
-                    boundProperties.ToDictionary(GetHeaderKey, property => GetHeaderValue(property, messageBody));
-            }
+            ScanForBindings(message.MessageType)
+                .ForEach(binding => binding.ToMessageMetaData(messageBody, messageProperties));
 
+            // Override Type property - this is critical for EasyNetQ to function...
             var typeName = _typeNameSerializer.Serialize(message.MessageType);
             messageProperties.Type = typeName;
 
@@ -64,55 +62,57 @@
             return new SerializedMessage(messageProperties, messageBytes);
         }
 
-        private void BindHeaderValues(IReflect messageType, Object messageBody, IDictionary<String, Object> headers) {
-            var boundProperties = ScanForBoundProperties(messageType);
+        static List<IMetaDataBinding> ScanForBindings(IReflect messageType) {
+            var bindings = messageType.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(property => property.CanRead && property.CanWrite)
+                .SelectMany(MakeBindings)
+                .ToList();
 
-            // There is a special case when only one message header is defined - the singular header value will be
-            // accessible using the key "header_value" rather than the original header key...
-            if (boundProperties.Count() == 1) {
-                var boundProperty = boundProperties.Single();
-                var headerValue = GetHeaderValue(headers, "header_value");
-                BindHeaderValue(boundProperty, messageBody, headerValue);
+            return bindings;
+        }
+
+        static IEnumerable<IMetaDataBinding> MakeBindings(PropertyInfo property) {
+            var messageHeaderAttribute = property.GetCustomAttribute<MessageHeaderAttribute>();
+            var messagePropertyAttribute = property.GetCustomAttribute<MessagePropertyAttribute>();
+
+            if (messageHeaderAttribute != null) {
+                yield return new HeaderBinding {
+                    BoundProperty = property,
+                    HeaderKey = messageHeaderAttribute.Key
+                };
             }
-            if (boundProperties.Count() > 1) {
-                foreach (var boundProperty in boundProperties) {
-                    var headerKey = GetHeaderKey(boundProperty);
-                    var headerValue = GetHeaderValue(headers, headerKey);
-                    BindHeaderValue(boundProperty, messageBody, headerValue);
+
+            if (messagePropertyAttribute != null) {
+                switch (messagePropertyAttribute.Property) {
+                    case Property.ContentType:
+                        yield return new ContentTypeBinding { BoundProperty = property };
+                        break;
+                    case Property.ContentEncoding:
+                        yield return new ContentEncodingBinding { BoundProperty = property };
+                        break;
+                    case Property.Timestamp:
+                        yield return new TimestampBinding { BoundProperty = property };
+                        break;
+                    case Property.DeliveryMode:
+                        yield return new DeliveryModeBinding { BoundProperty = property };
+                        break;
+                    case Property.Priority:
+                        yield return new PriorityBinding { BoundProperty = property };
+                        break;
+                    case Property.CorrelationId:
+                        yield return new CorrelationIdBinding { BoundProperty = property };
+                        break;
+                    case Property.ReplyTo:
+                        yield return new ReplyToBinding { BoundProperty = property };
+                        break;
+                    case Property.Expiration:
+                        yield return new ExpirationBinding { BoundProperty = property };
+                        break;
+                    case Property.MessageId:
+                        yield return new MessageIdBinding { BoundProperty = property };
+                        break;
                 }
             }
-        }
-
-        private static IList<PropertyInfo> ScanForBoundProperties(IReflect type) {
-            return type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(property => property.CanRead && property.CanWrite)
-                .Where(property => property.GetCustomAttribute<MessageHeaderAttribute>(inherit: false) != null)
-                .ToList();
-        }
-
-        private static String GetHeaderKey(PropertyInfo boundProperty) {
-            var messageHeaderAttribute = boundProperty.GetCustomAttribute<MessageHeaderAttribute>(inherit: false);
-
-            return messageHeaderAttribute.Key;
-        }
-
-        private static Object GetHeaderValue(PropertyInfo boundProperty, Object message) {
-            var typeConverter = TypeDescriptor.GetConverter(boundProperty.PropertyType);
-            var propertyValue = boundProperty.GetValue(message);
-
-            return typeConverter.ConvertToInvariantString(propertyValue);
-        }
-
-        private static String GetHeaderValue(IDictionary<String, Object> headers, String key) {
-            var headerBytes = (byte[])headers[key];
-            return Encoding.UTF8.GetString(headerBytes);
-        }
-
-        private static void BindHeaderValue(PropertyInfo boundProperty, Object message, String headerValue) {
-            var typeConverter = TypeDescriptor.GetConverter(boundProperty.PropertyType);
-            var propertyValue = typeConverter.ConvertFromInvariantString(headerValue);
-
-            boundProperty.SetValue(message, propertyValue);
         }
     }
 }

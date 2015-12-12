@@ -91,7 +91,7 @@
                         yield return new ContentEncodingBinding { BoundProperty = property };
                         break;
                     case Property.Timestamp:
-                        yield return new TimestampPropertyBinding { BoundProperty = property };
+                        yield return new TimestampBinding { BoundProperty = property };
                         break;
                     case Property.DeliveryMode:
                         yield return new DeliveryModeBinding { BoundProperty = property };

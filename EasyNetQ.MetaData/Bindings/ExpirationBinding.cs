@@ -9,15 +9,20 @@
             var propertyValue = BoundProperty.GetValue(source);
             var timespan = (TimeSpan)Convert.ChangeType(propertyValue, typeof(TimeSpan));
 
-            destination.ExpirationPresent = true;
-            destination.Expiration = ((long)timespan.TotalMilliseconds).ToString();
+            if (timespan != default(TimeSpan)) {
+                destination.ExpirationPresent = true;
+                destination.Expiration = ((long)timespan.TotalMilliseconds).ToString();
+            }
         }
 
         public void FromMessageMetaData(MessageProperties source, Object destination) {
-            var expiration = TimeSpan.FromMilliseconds(Int64.Parse(source.Expiration));
-            var propertyValue = Convert.ChangeType(expiration, BoundProperty.PropertyType);
+            if (source.ExpirationPresent) {
+                var expirationMilliseconds = Int64.Parse(source.Expiration);
+                var expiration = TimeSpan.FromMilliseconds(expirationMilliseconds);
+                var propertyValue = Convert.ChangeType(expiration, BoundProperty.PropertyType);
 
-            BoundProperty.SetValue(destination, propertyValue);
+                BoundProperty.SetValue(destination, propertyValue);
+            }
         }
     }
 }

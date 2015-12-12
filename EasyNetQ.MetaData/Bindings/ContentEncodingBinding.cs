@@ -9,18 +9,22 @@
         public void ToMessageMetaData(Object source, MessageProperties destination) {
             var typeConverter = TypeDescriptor.GetConverter(BoundProperty.PropertyType);
             var propertyValue = BoundProperty.GetValue(source);
-            var contentEncoding = typeConverter.ConvertToInvariantString(propertyValue);
+            if (propertyValue != null) {
+                var contentEncoding = typeConverter.ConvertToInvariantString(propertyValue);
 
-            destination.ContentEncodingPresent = true;
-            destination.ContentEncoding = contentEncoding;
+                destination.ContentEncodingPresent = true;
+                destination.ContentEncoding = contentEncoding;
+            }
         }
 
         public void FromMessageMetaData(MessageProperties source, Object destination) {
-            var contentEncoding = source.ContentEncoding;
-            var typeConverter = TypeDescriptor.GetConverter(BoundProperty.PropertyType);
-            var propertyValue = typeConverter.ConvertFromInvariantString(contentEncoding);
+            if (source.ContentEncodingPresent) {
+                var contentEncoding = source.ContentEncoding;
+                var typeConverter = TypeDescriptor.GetConverter(BoundProperty.PropertyType);
+                var propertyValue = typeConverter.ConvertFromInvariantString(contentEncoding);
 
-            BoundProperty.SetValue(destination, propertyValue);
+                BoundProperty.SetValue(destination, propertyValue);
+            }
         }
     }
 }

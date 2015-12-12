@@ -9,15 +9,19 @@
             var propertyValue = BoundProperty.GetValue(source);
             var priority = Convert.ToByte(propertyValue);
 
-            destination.PriorityPresent = true;
-            destination.Priority = priority;
+            if (priority != default(Byte)) {
+                destination.PriorityPresent = true;
+                destination.Priority = priority;
+            }
         }
 
         public void FromMessageMetaData(MessageProperties source, Object destination) {
-            var priority = source.Priority;
-            var propertyValue = Convert.ChangeType(priority, BoundProperty.PropertyType);
+            if (source.PriorityPresent) {
+                var priority = source.Priority;
+                var propertyValue = Convert.ChangeType(priority, BoundProperty.PropertyType);
 
-            BoundProperty.SetValue(destination, propertyValue);
+                BoundProperty.SetValue(destination, propertyValue);
+            }
         }
     }
 }

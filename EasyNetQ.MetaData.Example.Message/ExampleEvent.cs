@@ -5,8 +5,7 @@
     public class ExampleEvent {
         public String MessageContent { get; set; }
 
-        [IgnoreDataMember]
-        [MessageHeader("header_value")]
+        [MessageHeader("my_custom_header"), IgnoreDataMember]
         public String HeaderValue { get; set; }
     }
 }

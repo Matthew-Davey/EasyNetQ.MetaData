@@ -22,6 +22,7 @@
                 Console.WriteLine("CorrelationId:       \"{0}\"", message.CorrelationId);
                 Console.WriteLine("ReplyTo:             \"{0}\"", message.ReplyTo);
                 Console.WriteLine("Expiration:          \"{0}\"", message.Expiration);
+                Console.WriteLine("MessageId:           \"{0}\"", message.MessageId);
             });
         }
     }

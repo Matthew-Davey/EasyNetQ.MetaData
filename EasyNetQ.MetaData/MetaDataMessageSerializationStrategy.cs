@@ -108,6 +108,9 @@
                     case Property.Expiration:
                         yield return new ExpirationBinding { BoundProperty = property };
                         break;
+                    case Property.MessageId:
+                        yield return new MessageIdBinding { BoundProperty = property };
+                        break;
                 }
             }
         }

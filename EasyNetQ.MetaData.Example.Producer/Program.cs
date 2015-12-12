@@ -32,7 +32,8 @@
                     Priority          = 1,
                     CorrelationId     = Guid.NewGuid(),
                     ReplyTo           = "Response Queue",
-                    Expiration        = TimeSpan.FromSeconds(30)
+                    Expiration        = TimeSpan.FromSeconds(30),
+                    MessageId         = Guid.NewGuid()
                 });
 
                 Task.Delay(1000).Wait();

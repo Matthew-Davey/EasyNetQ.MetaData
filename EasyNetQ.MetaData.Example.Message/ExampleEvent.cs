@@ -31,5 +31,8 @@
 
         [MessageProperty(Property.Expiration), IgnoreDataMember]
         public TimeSpan Expiration { get; set; }
+
+        [MessageProperty(Property.MessageId), IgnoreDataMember]
+        public Guid MessageId { get; set; }
     }
 }

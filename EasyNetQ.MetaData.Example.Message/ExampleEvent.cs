@@ -19,5 +19,8 @@
 
         [MessageProperty(Property.DeliveryMode), IgnoreDataMember]
         public Byte DeliveryMode { get; set; }
+
+        [MessageProperty(Property.Priority), IgnoreDataMember]
+        public Byte Priority { get; set; }
     }
 }

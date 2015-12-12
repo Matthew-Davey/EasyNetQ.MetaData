@@ -96,6 +96,9 @@
                     case Property.DeliveryMode:
                         yield return new DeliveryModeBinding { BoundProperty = property };
                         break;
+                    case Property.Priority:
+                        yield return new PriorityBinding { BoundProperty = property };
+                        break;
                 }
             }
         }

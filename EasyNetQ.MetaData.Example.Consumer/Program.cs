@@ -18,6 +18,7 @@
                 Console.WriteLine("Content Encoding:    \"{0}\"", message.ContentEncoding);
                 Console.WriteLine("Message Timestamp:   \"{0}\"", message.Timestamp);
                 Console.WriteLine("Delivery Mode:       \"{0}\"", message.DeliveryMode);
+                Console.WriteLine("Priority:            \"{0}\"", message.Priority);
             });
         }
     }

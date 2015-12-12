@@ -29,6 +29,7 @@
                     ContentEncoding   = Encoding.UTF8.WebName,
                     Timestamp         = DateTime.UtcNow,
                     DeliveryMode      = 1, // Non-persistent
+                    Priority          = 1
                 });
 
                 Task.Delay(1000).Wait();

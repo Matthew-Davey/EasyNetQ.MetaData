@@ -1,10 +1,9 @@
 ﻿namespace EasyNetQ.MetaData {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Linq;
     using System.Reflection;
-    using System.Text;
+    using EasyNetQ.MetaData.Bindings;
 
     internal class MetaDataMessageSerializationStrategy : IMessageSerializationStrategy {
         private readonly ITypeNameSerializer _typeNameSerializer;
@@ -63,39 +62,57 @@
             return new SerializedMessage(messageProperties, messageBytes);
         }
 
-        static List<HeaderBinding> ScanForBindings(IReflect messageType) {
+        static List<IMetaDataBinding> ScanForBindings(IReflect messageType) {
             var bindings = messageType.GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(property => property.CanRead && property.CanWrite)
-                .Where(property => property.GetCustomAttribute<MessageHeaderAttribute>() != null)
-                .Select(property => new HeaderBinding {
-                    BoundProperty = property,
-                    HeaderKey = property.GetCustomAttribute<MessageHeaderAttribute>().Key
-                })
+                .SelectMany(MakeBindings)
                 .ToList();
 
             return bindings;
         }
-    }
 
-    class HeaderBinding {
-        public PropertyInfo BoundProperty { get; set; }
-        public String HeaderKey { get; set; }
+        static IEnumerable<IMetaDataBinding> MakeBindings(PropertyInfo property) {
+            var messageHeaderAttribute = property.GetCustomAttribute<MessageHeaderAttribute>();
+            var messagePropertyAttribute = property.GetCustomAttribute<MessagePropertyAttribute>();
 
-        public void ToMessageMetaData(Object source, MessageProperties destination) {
-            var typeConverter = TypeDescriptor.GetConverter(BoundProperty.PropertyType);
-            var propertyValue = BoundProperty.GetValue(source);
-            var headerValue   = typeConverter.ConvertToInvariantString(propertyValue);
+            if (messageHeaderAttribute != null) {
+                yield return new HeaderBinding {
+                    BoundProperty = property,
+                    HeaderKey = messageHeaderAttribute.Key
+                };
+            }
 
-            destination.Headers[HeaderKey] = headerValue;
-        }
-
-        public void FromMessageMetaData(MessageProperties source, Object destination) {
-            var headerBytes       = (Byte[])source.Headers[HeaderKey];
-            var headerStringValue = Encoding.UTF8.GetString(headerBytes);
-            var typeConverter     = TypeDescriptor.GetConverter(BoundProperty.PropertyType);
-            var propertyValue     = typeConverter.ConvertFromInvariantString(headerStringValue);
-
-            BoundProperty.SetValue(destination, propertyValue);
+            if (messagePropertyAttribute != null) {
+                switch (messagePropertyAttribute.Property) {
+                    case Property.ContentType:
+                        yield return new ContentTypeBinding { BoundProperty = property };
+                        break;
+                    case Property.ContentEncoding:
+                        yield return new ContentEncodingBinding { BoundProperty = property };
+                        break;
+                    case Property.Timestamp:
+                        yield return new TimestampPropertyBinding { BoundProperty = property };
+                        break;
+                    case Property.DeliveryMode:
+                        yield return new DeliveryModeBinding { BoundProperty = property };
+                        break;
+                    case Property.Priority:
+                        yield return new PriorityBinding { BoundProperty = property };
+                        break;
+                    case Property.CorrelationId:
+                        yield return new CorrelationIdBinding { BoundProperty = property };
+                        break;
+                    case Property.ReplyTo:
+                        yield return new ReplyToBinding { BoundProperty = property };
+                        break;
+                    case Property.Expiration:
+                        yield return new ExpirationBinding { BoundProperty = property };
+                        break;
+                    case Property.MessageId:
+                        yield return new MessageIdBinding { BoundProperty = property };
+                        break;
+                }
+            }
         }
     }
 }

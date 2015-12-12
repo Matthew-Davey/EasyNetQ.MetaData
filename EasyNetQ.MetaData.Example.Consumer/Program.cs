@@ -13,7 +13,16 @@
             Console.CancelKeyPress += (sender, eventArgs) => bus.Dispose();
 
             bus.Subscribe<ExampleEvent>(String.Empty, message => {
-                // Intentionally empty...
+                Console.WriteLine("Custom Header Value: \"{0}\"", message.CustomHeaderValue);
+                Console.WriteLine("Content Type:        \"{0}\"", message.ContentType);
+                Console.WriteLine("Content Encoding:    \"{0}\"", message.ContentEncoding);
+                Console.WriteLine("Message Timestamp:   \"{0}\"", message.Timestamp);
+                Console.WriteLine("Delivery Mode:       \"{0}\"", message.DeliveryMode);
+                Console.WriteLine("Priority:            \"{0}\"", message.Priority);
+                Console.WriteLine("CorrelationId:       \"{0}\"", message.CorrelationId);
+                Console.WriteLine("ReplyTo:             \"{0}\"", message.ReplyTo);
+                Console.WriteLine("Expiration:          \"{0}\"", message.Expiration);
+                Console.WriteLine("MessageId:           \"{0}\"", message.MessageId);
             });
         }
     }

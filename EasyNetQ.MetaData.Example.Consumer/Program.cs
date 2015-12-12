@@ -17,6 +17,7 @@
                 Console.WriteLine("Content Type:        \"{0}\"", message.ContentType);
                 Console.WriteLine("Content Encoding:    \"{0}\"", message.ContentEncoding);
                 Console.WriteLine("Message Timestamp:   \"{0}\"", message.Timestamp);
+                Console.WriteLine("Delivery Mode:       \"{0}\"", message.DeliveryMode);
             });
         }
     }

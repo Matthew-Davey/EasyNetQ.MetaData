@@ -16,5 +16,8 @@
 
         [MessageProperty(Property.Timestamp), IgnoreDataMember]
         public DateTime Timestamp { get; set; }
+
+        [MessageProperty(Property.DeliveryMode), IgnoreDataMember]
+        public Byte DeliveryMode { get; set; }
     }
 }

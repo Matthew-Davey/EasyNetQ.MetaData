@@ -93,6 +93,9 @@
                     case Property.Timestamp:
                         yield return new TimestampPropertyBinding { BoundProperty = property };
                         break;
+                    case Property.DeliveryMode:
+                        yield return new DeliveryModeBinding { BoundProperty = property };
+                        break;
                 }
             }
         }

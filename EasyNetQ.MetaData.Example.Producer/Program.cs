@@ -27,7 +27,8 @@
                     CustomHeaderValue = "My Header Value",
                     ContentType       = "application/json",
                     ContentEncoding   = Encoding.UTF8.WebName,
-                    Timestamp         = DateTime.UtcNow
+                    Timestamp         = DateTime.UtcNow,
+                    DeliveryMode      = 1, // Non-persistent
                 });
 
                 Task.Delay(1000).Wait();

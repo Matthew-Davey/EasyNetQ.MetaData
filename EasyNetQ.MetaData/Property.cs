@@ -8,10 +8,6 @@
         ReplyTo,
         Expiration,
         MessageId,
-        Timestamp,
-        Type,
-        UserId,
-        AppId,
-        ClusterId,
+        Timestamp
     }
 }

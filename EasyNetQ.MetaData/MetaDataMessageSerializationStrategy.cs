@@ -102,6 +102,9 @@
                     case Property.CorrelationId:
                         yield return new CorrelationIdBinding { BoundProperty = property };
                         break;
+                    case Property.ReplyTo:
+                        yield return new ReplyToBinding { BoundProperty = property };
+                        break;
                 }
             }
         }

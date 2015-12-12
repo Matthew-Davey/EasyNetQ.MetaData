@@ -30,7 +30,8 @@
                     Timestamp         = DateTime.UtcNow,
                     DeliveryMode      = 1, // Non-persistent
                     Priority          = 1,
-                    CorrelationId     = Guid.NewGuid()
+                    CorrelationId     = Guid.NewGuid(),
+                    ReplyTo           = "Response Queue"
                 });
 
                 Task.Delay(1000).Wait();

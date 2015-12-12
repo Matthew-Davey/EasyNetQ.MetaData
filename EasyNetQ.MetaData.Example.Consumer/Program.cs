@@ -20,6 +20,7 @@
                 Console.WriteLine("Delivery Mode:       \"{0}\"", message.DeliveryMode);
                 Console.WriteLine("Priority:            \"{0}\"", message.Priority);
                 Console.WriteLine("CorrelationId:       \"{0}\"", message.CorrelationId);
+                Console.WriteLine("ReplyTo:             \"{0}\"", message.ReplyTo);
             });
         }
     }

@@ -25,5 +25,8 @@
 
         [MessageProperty(Property.CorrelationId), IgnoreDataMember]
         public Guid CorrelationId { get; set; }
+
+        [MessageProperty(Property.ReplyTo), IgnoreDataMember]
+        public String ReplyTo { get; set; }
     }
 }

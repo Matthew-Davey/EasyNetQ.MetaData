@@ -51,6 +51,7 @@
     <Compile Include="Bindings\DeliveryModeBinding.cs" />
     <Compile Include="Bindings\HeaderBinding.cs" />
     <Compile Include="Bindings\PriorityBinding.cs" />
+    <Compile Include="Bindings\ReplyToBinding.cs" />
     <Compile Include="Bindings\TimestampPropertyBinding.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="IMetaDataBinding.cs" />

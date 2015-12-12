@@ -11,18 +11,23 @@
         public void ToMessageMetaData(Object source, MessageProperties destination) {
             var typeConverter = TypeDescriptor.GetConverter(BoundProperty.PropertyType);
             var propertyValue = BoundProperty.GetValue(source);
-            var headerValue   = typeConverter.ConvertToInvariantString(propertyValue);
 
-            destination.Headers[HeaderKey] = headerValue;
+            if (propertyValue != null) {
+                var headerValue   = typeConverter.ConvertToInvariantString(propertyValue);
+
+                destination.Headers[HeaderKey] = headerValue;
+            }
         }
 
         public void FromMessageMetaData(MessageProperties source, Object destination) {
-            var headerBytes       = (Byte[])source.Headers[HeaderKey];
-            var headerStringValue = Encoding.UTF8.GetString(headerBytes);
-            var typeConverter     = TypeDescriptor.GetConverter(BoundProperty.PropertyType);
-            var propertyValue     = typeConverter.ConvertFromInvariantString(headerStringValue);
+            if (source.Headers.ContainsKey(HeaderKey)) {
+                var headerBytes       = (Byte[])source.Headers[HeaderKey];
+                var headerStringValue = Encoding.UTF8.GetString(headerBytes);
+                var typeConverter     = TypeDescriptor.GetConverter(BoundProperty.PropertyType);
+                var propertyValue     = typeConverter.ConvertFromInvariantString(headerStringValue);
 
-            BoundProperty.SetValue(destination, propertyValue);
+                BoundProperty.SetValue(destination, propertyValue);
+            }
         }
     }
 }

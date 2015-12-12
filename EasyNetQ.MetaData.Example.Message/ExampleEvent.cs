@@ -8,6 +8,9 @@
         [MessageHeader("my_custom_header"), IgnoreDataMember]
         public String CustomHeaderValue { get; set; }
 
+        [MessageProperty(Property.ContentType), IgnoreDataMember]
+        public String ContentType { get; set; }
+
         [MessageProperty(Property.Timestamp), IgnoreDataMember]
         public DateTime Timestamp { get; set; }
     }

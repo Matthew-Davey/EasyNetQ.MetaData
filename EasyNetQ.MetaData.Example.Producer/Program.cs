@@ -24,6 +24,7 @@
                 bus.Publish(new ExampleEvent {
                     MessageContent    = "Message Content",
                     CustomHeaderValue = "My Header Value",
+                    ContentType       = "application/json",
                     Timestamp         = DateTime.UtcNow
                 });
 

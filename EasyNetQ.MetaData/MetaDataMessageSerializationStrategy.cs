@@ -84,6 +84,9 @@
 
             if (messagePropertyAttribute != null) {
                 switch (messagePropertyAttribute.Property) {
+                    case Property.ContentType:
+                        yield return new ContentTypeBinding { BoundProperty = property };
+                        break;
                     case Property.Timestamp:
                         yield return new TimestampPropertyBinding { BoundProperty = property };
                         break;

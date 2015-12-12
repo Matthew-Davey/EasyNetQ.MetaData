@@ -2,6 +2,7 @@
     using System;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Text;
     using EasyNetQ;
     using EasyNetQ.Loggers;
     using EasyNetQ.MetaData.Example.Message;
@@ -25,6 +26,7 @@
                     MessageContent    = "Message Content",
                     CustomHeaderValue = "My Header Value",
                     ContentType       = "application/json",
+                    ContentEncoding   = Encoding.UTF8.WebName,
                     Timestamp         = DateTime.UtcNow
                 });
 

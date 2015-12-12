@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bindings\ContentEncodingBinding.cs" />
     <Compile Include="Bindings\ContentTypeBinding.cs" />
     <Compile Include="Bindings\HeaderBinding.cs" />
     <Compile Include="Bindings\TimestampPropertyBinding.cs" />

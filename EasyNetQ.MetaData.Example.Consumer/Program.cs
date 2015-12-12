@@ -15,6 +15,7 @@
             bus.Subscribe<ExampleEvent>(String.Empty, message => {
                 Console.WriteLine("Custom Header Value: \"{0}\"", message.CustomHeaderValue);
                 Console.WriteLine("Content Type:        \"{0}\"", message.ContentType);
+                Console.WriteLine("Content Encoding:    \"{0}\"", message.ContentEncoding);
                 Console.WriteLine("Message Timestamp:   \"{0}\"", message.Timestamp);
             });
         }

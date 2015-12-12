@@ -11,6 +11,9 @@
         [MessageProperty(Property.ContentType), IgnoreDataMember]
         public String ContentType { get; set; }
 
+        [MessageProperty(Property.ContentEncoding), IgnoreDataMember]
+        public String ContentEncoding { get; set; }
+
         [MessageProperty(Property.Timestamp), IgnoreDataMember]
         public DateTime Timestamp { get; set; }
     }

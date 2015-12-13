@@ -7,10 +7,25 @@
     using EasyNetQ.MetaData.Bindings;
 
     internal class MetaDataMessageSerializationStrategy : IMessageSerializationStrategy {
-        private readonly ITypeNameSerializer _typeNameSerializer;
-        private readonly ISerializer _serializer;
-        private readonly ICorrelationIdGenerationStrategy _correlationIdGenerator;
-        private readonly ConcurrentDictionary<Type, List<IMetaDataBinding>> _bindingCache;
+        readonly ITypeNameSerializer _typeNameSerializer;
+        readonly ISerializer _serializer;
+        readonly ICorrelationIdGenerationStrategy _correlationIdGenerator;
+        readonly ConcurrentDictionary<Type, List<IMetaDataBinding>> _bindingCache;
+        static readonly IDictionary<Property, Func<PropertyInfo, IMetaDataBinding>> _bindingBuilders;
+
+        static MetaDataMessageSerializationStrategy() {
+            _bindingBuilders = new Dictionary<Property, Func<PropertyInfo, IMetaDataBinding>> {
+                { Property.ContentType,     (property) => new ContentTypeBinding     { BoundProperty = property } },
+                { Property.ContentEncoding, (property) => new ContentEncodingBinding { BoundProperty = property } },
+                { Property.Timestamp,       (property) => new TimestampBinding       { BoundProperty = property } },
+                { Property.DeliveryMode,    (property) => new DeliveryModeBinding    { BoundProperty = property } },
+                { Property.Priority,        (property) => new PriorityBinding        { BoundProperty = property } },
+                { Property.CorrelationId,   (property) => new CorrelationIdBinding   { BoundProperty = property } },
+                { Property.ReplyTo,         (property) => new ReplyToBinding         { BoundProperty = property } },
+                { Property.Expiration,      (property) => new ExpirationBinding      { BoundProperty = property } },
+                { Property.MessageId,       (property) => new MessageIdBinding       { BoundProperty = property } },
+            };
+        }
 
         public MetaDataMessageSerializationStrategy(ITypeNameSerializer typeNameSerializer, ISerializer serializer, ICorrelationIdGenerationStrategy correlationIdGenerator) {
             if (typeNameSerializer == null)
@@ -54,7 +69,8 @@
             _bindingCache.GetOrAdd(message.MessageType, ScanForBindings)
                 .ForEach(binding => binding.ToMessageMetaData(messageBody, messageProperties));
 
-            // Override Type property - this is critical for EasyNetQ to function...
+            // The reminder of this method duplicates the behaviour of the default EasyNetQ message serialization
+            // strategy (it would be wonderful if we could just wrap it with a decorator)...
             var typeName = _typeNameSerializer.Serialize(message.MessageType);
             messageProperties.Type = typeName;
 
@@ -76,45 +92,19 @@
 
         static IEnumerable<IMetaDataBinding> MakeBindings(PropertyInfo property) {
             var messageHeaderAttribute = property.GetCustomAttribute<MessageHeaderAttribute>();
-            var messagePropertyAttribute = property.GetCustomAttribute<MessagePropertyAttribute>();
 
             if (messageHeaderAttribute != null) {
                 yield return new HeaderBinding {
                     BoundProperty = property,
                     HeaderKey = messageHeaderAttribute.Key
                 };
+                yield break;
             }
 
-            if (messagePropertyAttribute != null) {
-                switch (messagePropertyAttribute.Property) {
-                    case Property.ContentType:
-                        yield return new ContentTypeBinding { BoundProperty = property };
-                        break;
-                    case Property.ContentEncoding:
-                        yield return new ContentEncodingBinding { BoundProperty = property };
-                        break;
-                    case Property.Timestamp:
-                        yield return new TimestampBinding { BoundProperty = property };
-                        break;
-                    case Property.DeliveryMode:
-                        yield return new DeliveryModeBinding { BoundProperty = property };
-                        break;
-                    case Property.Priority:
-                        yield return new PriorityBinding { BoundProperty = property };
-                        break;
-                    case Property.CorrelationId:
-                        yield return new CorrelationIdBinding { BoundProperty = property };
-                        break;
-                    case Property.ReplyTo:
-                        yield return new ReplyToBinding { BoundProperty = property };
-                        break;
-                    case Property.Expiration:
-                        yield return new ExpirationBinding { BoundProperty = property };
-                        break;
-                    case Property.MessageId:
-                        yield return new MessageIdBinding { BoundProperty = property };
-                        break;
-                }
+            var messagePropertyAttribute = property.GetCustomAttribute<MessagePropertyAttribute>();
+
+            if (messagePropertyAttribute != null && _bindingBuilders.ContainsKey(messagePropertyAttribute.Property)) {
+                yield return _bindingBuilders[messagePropertyAttribute.Property].Invoke(property);
             }
         }
     }

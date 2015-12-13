@@ -1,6 +1,7 @@
 ﻿namespace EasyNetQ.MetaData {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Concurrent;
     using System.Linq;
     using System.Reflection;
     using EasyNetQ.MetaData.Bindings;
@@ -9,6 +10,7 @@
         private readonly ITypeNameSerializer _typeNameSerializer;
         private readonly ISerializer _serializer;
         private readonly ICorrelationIdGenerationStrategy _correlationIdGenerator;
+        private readonly ConcurrentDictionary<Type, List<IMetaDataBinding>> _bindingCache;
 
         public MetaDataMessageSerializationStrategy(ITypeNameSerializer typeNameSerializer, ISerializer serializer, ICorrelationIdGenerationStrategy correlationIdGenerator) {
             if (typeNameSerializer == null)
@@ -23,13 +25,14 @@
             _typeNameSerializer = typeNameSerializer;
             _serializer = serializer;
             _correlationIdGenerator = correlationIdGenerator;
+            _bindingCache = new ConcurrentDictionary<Type, List<IMetaDataBinding>>();
         }
 
         public IMessage DeserializeMessage(MessageProperties properties, Byte[] body) {
             var messageType = _typeNameSerializer.DeSerialize(properties.Type);
             var messageBody = _serializer.BytesToMessage(properties.Type, body);
 
-            ScanForBindings(messageType)
+            _bindingCache.GetOrAdd(messageType, ScanForBindings)
                 .ForEach(binding => binding.FromMessageMetaData(properties, messageBody));
 
             return MessageFactory.CreateInstance(messageType, messageBody, properties);
@@ -38,7 +41,7 @@
         public IMessage<T> DeserializeMessage<T>(MessageProperties properties, Byte[] body) where T : class {
             var messageBody = _serializer.BytesToMessage<T>(body);
 
-            ScanForBindings(typeof(T))
+            _bindingCache.GetOrAdd(typeof(T), ScanForBindings)
                 .ForEach(binding => binding.FromMessageMetaData(properties, messageBody));
 
             return new Message<T>(messageBody, properties);
@@ -48,7 +51,7 @@
             var messageBody = message.GetBody();
             var messageProperties = message.Properties;
 
-            ScanForBindings(message.MessageType)
+            _bindingCache.GetOrAdd(message.MessageType, ScanForBindings)
                 .ForEach(binding => binding.ToMessageMetaData(messageBody, messageProperties));
 
             // Override Type property - this is critical for EasyNetQ to function...

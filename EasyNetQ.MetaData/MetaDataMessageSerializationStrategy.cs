@@ -69,7 +69,7 @@
             _bindingCache.GetOrAdd(message.MessageType, ScanForBindings)
                 .ForEach(binding => binding.ToMessageMetaData(messageBody, messageProperties));
 
-            // The reminder of this method duplicates the behaviour of the default EasyNetQ message serialization
+            // The remainder of this method duplicates the behaviour of the default EasyNetQ message serialization
             // strategy (it would be wonderful if we could just wrap it with a decorator)...
             var typeName = _typeNameSerializer.Serialize(message.MessageType);
             messageProperties.Type = typeName;
@@ -94,10 +94,7 @@
             var messageHeaderAttribute = property.GetCustomAttribute<MessageHeaderAttribute>();
 
             if (messageHeaderAttribute != null) {
-                yield return new HeaderBinding {
-                    BoundProperty = property,
-                    HeaderKey = messageHeaderAttribute.Key
-                };
+                yield return new HeaderBinding(property, messageHeaderAttribute.Key);
                 yield break;
             }
 

@@ -51,10 +51,6 @@ nugets_pack :package => [:build] do |nuget|
     meta.project_url = 'https://github.com/Matthew-Davey/EasyNetQ.MetaData'
     meta.tags = 'amqp rabbitmq easynetq header'
   end
-  nuget.with_package do |pkg|
-    docFile = "EasyNetQ.MetaData/bin/#{build_configuration}/EasyNetQ.MetaData.XML"
-    pkg.add_file docFile, 'lib/net40' if File.exist?(docFile)
-  end
 end
 
 task :publish => [:package] do

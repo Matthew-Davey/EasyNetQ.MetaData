@@ -8,9 +8,11 @@ task :default => [:clean, :version, :build]
 desc 'Clean up the working folder, deletes bin and obj'
 build :clean do |build|
   rm_rf 'pkg'
-  build.file = 'EasyNetQ.MetaData.sln'
+  build.nologo
+  build.sln = 'EasyNetQ.MetaData.sln'
   build.target = [ :Clean ]
   build.prop 'configuration', build_configuration
+  build.logging = 'detailed'
 end
 
 desc 'Extract version information from .semver'
@@ -32,9 +34,12 @@ end
 
 desc 'Executes msbuild/xbuild against the project file'
 build :build => [:clean, :version, :package_restore] do |build|
-  build.file = 'EasyNetQ.MetaData.sln'
+  build.nologo
+  build.sln = 'EasyNetQ.MetaData.sln'
   build.target = [ :Build ]
   build.prop 'configuration', build_configuration
+  build.logging = 'detailed'
+  build.add_parameter '/consoleloggerparameters:PerformanceSummary;Summary;ShowTimestamp'
 end
 
 desc 'Writes out the nuget package for the current version'

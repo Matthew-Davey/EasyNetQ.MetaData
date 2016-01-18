@@ -5,28 +5,33 @@
     using System.Text;
 
     class HeaderBinding : IMetaDataBinding {
-        public PropertyInfo BoundProperty { get; set; }
-        public String HeaderKey { get; set; }
+        private readonly PropertyInfo _boundProperty;
+        private readonly TypeConverter _typeConverter;
+        private readonly String _headerKey;
+
+        public HeaderBinding(PropertyInfo boundProperty, String headerKey) {
+            _boundProperty = boundProperty;
+            _typeConverter = TypeDescriptor.GetConverter(boundProperty.PropertyType);
+            _headerKey     = headerKey;
+        }
 
         public void ToMessageMetaData(Object source, MessageProperties destination) {
-            var typeConverter = TypeDescriptor.GetConverter(BoundProperty.PropertyType);
-            var propertyValue = BoundProperty.GetValue(source);
+            var propertyValue = _boundProperty.GetValue(source);
 
             if (propertyValue != null) {
-                var headerValue   = typeConverter.ConvertToInvariantString(propertyValue);
+                var headerValue = _typeConverter.ConvertToInvariantString(propertyValue);
 
-                destination.Headers[HeaderKey] = headerValue;
+                destination.Headers[_headerKey] = headerValue;
             }
         }
 
         public void FromMessageMetaData(MessageProperties source, Object destination) {
-            if (source.Headers.ContainsKey(HeaderKey)) {
-                var headerBytes       = (Byte[])source.Headers[HeaderKey];
+            if (source.Headers.ContainsKey(_headerKey)) {
+                var headerBytes       = (Byte[])source.Headers[_headerKey];
                 var headerStringValue = Encoding.UTF8.GetString(headerBytes);
-                var typeConverter     = TypeDescriptor.GetConverter(BoundProperty.PropertyType);
-                var propertyValue     = typeConverter.ConvertFromInvariantString(headerStringValue);
+                var propertyValue     = _typeConverter.ConvertFromInvariantString(headerStringValue);
 
-                BoundProperty.SetValue(destination, propertyValue);
+                _boundProperty.SetValue(destination, propertyValue);
             }
         }
     }

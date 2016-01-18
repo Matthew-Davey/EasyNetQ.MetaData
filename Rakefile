@@ -61,7 +61,7 @@ end
 task :publish => [:package] do
   package = "pkg/EasyNetQ.MetaData.#{ENV['NUGET_VERSION']}.nupkg"
   nuget = Albacore::Nugets::find_nuget_gem_exe
-  system(nuget, "push #{package} #{ENV['NUGET_API_KEY']} -NonInteractive -Verbosity detailed")
+  system("#{nuget} push #{package} #{ENV['NUGET_API_KEY']} -NonInteractive -Verbosity detailed")
 end
 
 def build_configuration

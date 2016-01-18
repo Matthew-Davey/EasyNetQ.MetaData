@@ -28,7 +28,7 @@
                     ContentType       = "application/json",
                     ContentEncoding   = Encoding.UTF8.WebName,
                     Timestamp         = DateTime.UtcNow,
-                    DeliveryMode      = 1, // Non-persistent
+                    DeliveryMode      = DeliveryMode.NonPersistent,
                     Priority          = 1,
                     CorrelationId     = Guid.NewGuid(),
                     ReplyTo           = "Response Queue",

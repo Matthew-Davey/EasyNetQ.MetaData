@@ -1,5 +1,6 @@
 ﻿namespace EasyNetQ.MetaData.Example.Message {
     using System;
+    using System.ComponentModel;
     using System.Runtime.Serialization;
 
     public class ExampleEvent {
@@ -7,6 +8,9 @@
 
         [MessageHeader("my_custom_header"), IgnoreDataMember]
         public String CustomHeaderValue { get; set; }
+
+        [MessageHeader("my_custom_date_header"), IgnoreDataMember, TypeConverter(typeof(SampleDateConverter))]
+        public DateTime CustomHeaderDateValue { get; set; }
 
         [MessageProperty(Property.ContentType), IgnoreDataMember]
         public String ContentType { get; set; }

@@ -15,17 +15,14 @@
             _headerKey     = headerKey;
         }
 
-        private TypeConverter GetConverter(PropertyInfo boundProperty)
-        {
+        private TypeConverter GetConverter(PropertyInfo boundProperty) {
             TypeConverter typeConverter;
             var tcAttr = _boundProperty.GetCustomAttribute<TypeConverterAttribute>();
-            if (tcAttr != null)
-            {
+            if (tcAttr != null) {
                 var t = Type.GetType(tcAttr.ConverterTypeName);
                 typeConverter = (TypeConverter)Activator.CreateInstance(t);
             }
-            else
-            {
+            else {
                 typeConverter = TypeDescriptor.GetConverter(boundProperty.PropertyType);
             }
 

@@ -11,8 +11,22 @@
 
         public HeaderBinding(PropertyInfo boundProperty, String headerKey) {
             _boundProperty = boundProperty;
-            _typeConverter = TypeDescriptor.GetConverter(boundProperty.PropertyType);
+            _typeConverter = GetConverter(boundProperty);
             _headerKey     = headerKey;
+        }
+
+        private TypeConverter GetConverter(PropertyInfo boundProperty) {
+            TypeConverter typeConverter;
+            var tcAttr = _boundProperty.GetCustomAttribute<TypeConverterAttribute>();
+            if (tcAttr != null) {
+                var t = Type.GetType(tcAttr.ConverterTypeName);
+                typeConverter = (TypeConverter)Activator.CreateInstance(t);
+            }
+            else {
+                typeConverter = TypeDescriptor.GetConverter(boundProperty.PropertyType);
+            }
+
+            return typeConverter;
         }
 
         public void ToMessageMetaData(Object source, MessageProperties destination) {

@@ -99,7 +99,7 @@ public class MyMessage {
 
 
 ### Building from source
-* Requires Ruby v2.1.7 (not compatible with 2.2.3). If you need to run multiple Ruby versions use RVM (https://rvm.io/). On Windows use RubyInstaller (http://rubyinstaller.org/)
+* Requires Ruby v2.2.*. If you need to run multiple Ruby versions use RVM (https://rvm.io/). On Windows use RubyInstaller (http://rubyinstaller.org/)
 * Requires Bundler (http://bundler.io/) `gem install bundler`
 
 ```

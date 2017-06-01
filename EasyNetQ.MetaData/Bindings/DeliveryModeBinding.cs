@@ -1,6 +1,7 @@
 ﻿namespace EasyNetQ.MetaData.Bindings {
     using System;
     using System.Reflection;
+    using EasyNetQ.MetaData.Abstractions;
 
     class DeliveryModeBinding : IMetaDataBinding {
         const Byte DefaultDeliveryMode = 2;
@@ -21,7 +22,13 @@
         public void FromMessageMetaData(MessageProperties source, Object destination) {
             if (source.DeliveryModePresent) {
                 var deliveryMode = source.DeliveryMode;
-                var propertyValue = Convert.ChangeType(deliveryMode, BoundProperty.PropertyType);
+
+                object propertyValue;
+                if (BoundProperty.PropertyType == typeof(DeliveryMode)) {
+                    propertyValue = (DeliveryMode)deliveryMode;
+                } else {
+                    propertyValue = Convert.ChangeType(deliveryMode, BoundProperty.PropertyType);
+                }
 
                 BoundProperty.SetValue(destination, propertyValue);
             }

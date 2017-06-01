@@ -4,13 +4,13 @@ An extension to EasyNetQ that allows you to utilize message headers and properti
 [![Build Status](https://travis-ci.org/Matthew-Davey/EasyNetQ.MetaData.svg?branch=develop)](https://travis-ci.org/Matthew-Davey/EasyNetQ.MetaData) [![Nuget Downloads](https://img.shields.io/nuget/dt/EasyNetQ.MetaData.svg)](https://www.nuget.org/packages/EasyNetQ.MetaData/) [![Nuget Version](https://img.shields.io/nuget/v/EasyNetQ.MetaData.svg)](https://www.nuget.org/packages/EasyNetQ.MetaData/)
 
 ### Getting Started
-* Install the latest version of EasyNetQ.MetaData from NuGet - `Install-Package EasyNetQ.MetaData`
+* Install the latest version of EasyNetQ.MetaData and EasyNetQ.MetaData.Abstractions from NuGet - `Install-Package EasyNetQ.MetaData; Install-Package EasyNetQ.MetaData.Abstractions`
 
 ### Message Headers
 * Decorate the properties on your message POCO which you would like to bind to message headers
 
 ```csharp
-using EasyNetQ.MetaData;
+using EasyNetQ.MetaData.Abstractions;
 using System.Runtime.Serialization;
 
 public class MyMessage
@@ -60,28 +60,28 @@ In addition to message headers you can also bind one or more message properties.
 public class MyMessage {
     [MessageProperty(Property.ContentType), IgnoreDataMember]
     public String ContentType { get; set; }
-    
+
     [MessageProperty(Property.ContentEncoding), IgnoreDataMember]
     public String ContentEncoding { get; set; }
-    
+
     [MessageProperty(Property.Timestamp), IgnoreDataMember]
     public DateTime TimeStamp { get; set; }
-    
+
     [MessageProperty(Property.DeliveryMode), IgnoreDataMember]
     public DeliveryMode DeliveryMode { get; set; }
-    
+
     [MessageProperty(Property.Priority), IgnoreDataMember]
     public Byte Priority { get; set; }
-    
+
     [MessageProperty(Property.CorrelationId), IgnoreDataMember]
     public Guid CorrelationId { get; set; }
-    
+
     [MessageProperty(Property.ReplyTo), IgnoreDataMember]
     public String ReplyTo { get; set; }
-    
+
     [MessageProperty(Property.Expiration), IgnoreDataMember]
     public TimeSpan Expiration { get; set; }
-    
+
     [MessageProperty(Property.MessageId), IgnoreDataMember]
     public Guid MessageId { get; set; }
 }
@@ -89,11 +89,11 @@ public class MyMessage {
 
 * **ContentType** - If you override this property you'll need to be sure to implement your own message `ISerializer` which reads & honours the setting.
 * **ContentEncoding** - ^As above. You can override this to use an alternative encoding to UTF-8, if you want to.
-* **TimeStamp** - This must be a `DateTime` property (`DateTimeOffset` is not supported). It will be serialized in the message as a unix timestamp. This can be useful for calculating message handle time metrics.
+* **Timestamp** - This must be a `DateTime` property (`DateTimeOffset` is not supported). It will be serialized in the message as a unix timestamp. This can be useful for calculating message handle time metrics.
 * **DeliveryMode** - This can be any property which converts to `Byte`, although I recommend using the provided `DeliveryMode` enum for clarity. Use this to publish/send messages as non-persistent - useful if you're having IOps issues on your cluster.
 * **Priority** - This can be any property which converts to `Byte`. This will only work for priority queues (https://www.rabbitmq.com/priority.html), which EasyNetQ does not declare. As such it's _probably useless_.
 * **CorrelationId** - This has to be a `Guid`. EasyNetQ already assigns a CorrelationId but you can override it if you need to manually correlate messages together. May be useful for DTP?
-* **ReplyTo** - You can put an exchange/queue name in here. You can use it on the consuming side to send a response message.
+* **ReplyTo** - You can put an exchange/queue name in here. You can use it on the consuming side to send a response message, although you're probably better off using EasyNetQ's built-in request/response capability.
 * **Expiration** - This has to be a `TimeSpan` property. Use this to set a per-message TTL on your message (this has caveats - https://www.rabbitmq.com/ttl.html).
 * **MessageId** - This has to be a `Guid`. Can't think of a good use for this but hey, it's there if you want it.
 

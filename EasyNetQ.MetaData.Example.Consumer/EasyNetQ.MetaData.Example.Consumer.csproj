@@ -60,6 +60,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EasyNetQ.MetaData.Abstractions\EasyNetQ.MetaData.Abstractions.csproj">
+      <Project>{524533d8-62dd-4235-92d4-85d716a399bb}</Project>
+      <Name>EasyNetQ.MetaData.Abstractions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EasyNetQ.MetaData.Example.Message\EasyNetQ.MetaData.Example.Message.csproj">
       <Project>{54c088d7-5088-4758-9b19-297322d697d3}</Project>
       <Name>EasyNetQ.MetaData.Example.Message</Name>

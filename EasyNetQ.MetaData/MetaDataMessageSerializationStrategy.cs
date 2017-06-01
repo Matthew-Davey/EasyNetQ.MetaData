@@ -4,6 +4,7 @@
     using System.Collections.Concurrent;
     using System.Linq;
     using System.Reflection;
+    using EasyNetQ.MetaData.Abstractions;
     using EasyNetQ.MetaData.Bindings;
 
     internal class MetaDataMessageSerializationStrategy : IMessageSerializationStrategy {

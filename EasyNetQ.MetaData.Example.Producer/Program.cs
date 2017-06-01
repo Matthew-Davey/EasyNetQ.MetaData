@@ -5,6 +5,7 @@
     using System.Text;
     using EasyNetQ;
     using EasyNetQ.Loggers;
+    using EasyNetQ.MetaData.Abstractions;
     using EasyNetQ.MetaData.Example.Message;
 
     class Program {

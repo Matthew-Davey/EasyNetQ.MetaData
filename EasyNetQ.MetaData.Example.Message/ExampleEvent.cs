@@ -2,6 +2,7 @@
     using System;
     using System.ComponentModel;
     using System.Runtime.Serialization;
+    using EasyNetQ.MetaData.Abstractions;
 
     public class ExampleEvent {
         public String MessageContent { get; set; }

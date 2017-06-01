@@ -1,4 +1,4 @@
-﻿namespace EasyNetQ.MetaData {
+﻿namespace EasyNetQ.MetaData.Abstractions {
     using System;
     using System.ComponentModel;
 

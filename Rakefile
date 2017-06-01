@@ -20,7 +20,7 @@ Albacore::Tasks::Versionizer.new :read_semver
 
 desc 'Writes out the AssemblyVersion file'
 asmver :version => [:read_semver] do |file|
-  file.file_path = 'EasyNetQ.MetaData/Properties/AssemblyVersion.cs'
+  file.file_path = './AssemblyVersion.cs'
   file.attributes assembly_version: ENV['FORMAL_VERSION'],
     assembly_file_version: ENV['BUILD_VERSION'],
     assembly_informational_version: ENV['NUGET_VERSION']

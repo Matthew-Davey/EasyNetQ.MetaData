@@ -1,4 +1,4 @@
-﻿namespace EasyNetQ.MetaData {
+﻿namespace EasyNetQ.MetaData.Abstractions {
     public enum Property {
         ContentType,
         ContentEncoding,

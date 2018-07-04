@@ -29,24 +29,15 @@
         }
 
         public MetaDataMessageSerializationStrategy(ITypeNameSerializer typeNameSerializer, ISerializer serializer, ICorrelationIdGenerationStrategy correlationIdGenerator) {
-            if (typeNameSerializer == null)
-                throw new ArgumentNullException("typeNameSerializer");
-
-            if (serializer == null)
-                throw new ArgumentNullException("serializer");
-
-            if (correlationIdGenerator == null)
-                throw new ArgumentNullException("correlationIdGenerator");
-
-            _typeNameSerializer = typeNameSerializer;
-            _serializer = serializer;
-            _correlationIdGenerator = correlationIdGenerator;
+            _typeNameSerializer = typeNameSerializer ?? throw new ArgumentNullException(nameof(typeNameSerializer));
+            _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+            _correlationIdGenerator = correlationIdGenerator ?? throw new ArgumentNullException(nameof(correlationIdGenerator));
             _bindingCache = new ConcurrentDictionary<Type, List<IMetaDataBinding>>();
         }
 
         public IMessage DeserializeMessage(MessageProperties properties, Byte[] body) {
             var messageType = _typeNameSerializer.DeSerialize(properties.Type);
-            var messageBody = _serializer.BytesToMessage(properties.Type, body);
+            var messageBody = _serializer.BytesToMessage(messageType, body);
 
             _bindingCache.GetOrAdd(messageType, ScanForBindings)
                 .ForEach(binding => binding.FromMessageMetaData(properties, messageBody));

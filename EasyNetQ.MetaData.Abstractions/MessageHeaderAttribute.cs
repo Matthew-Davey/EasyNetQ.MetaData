@@ -6,8 +6,6 @@
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class MessageHeaderAttribute : Attribute {
-        private readonly String _key;
-
         /// <summary>
         /// Initializes a new instances of the <see cref="MessageHeaderAttribute"/> class.
         /// </summary>
@@ -21,14 +19,12 @@
             if (String.IsNullOrWhiteSpace(key))
                 throw new ArgumentNullException("key");
 
-            _key = key;
+            Key = key;
         }
 
         /// <summary>
         /// Gets the message header key.
         /// </summary>
-        public String Key {
-            get { return _key; }
-        }
+        public String Key { get; private set; }
     }
 }

@@ -4,15 +4,16 @@
     using System.Threading.Tasks;
     using System.Text;
     using EasyNetQ;
-    using EasyNetQ.Loggers;
+    using EasyNetQ.Logging;
     using EasyNetQ.MetaData.Abstractions;
     using EasyNetQ.MetaData.Example.Message;
 
     class Program {
         static void Main() {
-            var bus = RabbitHutch.CreateBus("host=localhost;username=guest;password=guest", registrar => registrar
-                .Register<IEasyNetQLogger>(_ => new ConsoleLogger())
-                .EnableMessageMetaDataBinding()
+            LogProvider.SetCurrentLogProvider(ConsoleLogProvider.Instance);
+
+            var bus = RabbitHutch.CreateBus("host=localhost;username=guest;password=guest", registrar =>
+                registrar.EnableMessageMetaDataBinding()
             );
 
             var cancellationTokenSource = new CancellationTokenSource();

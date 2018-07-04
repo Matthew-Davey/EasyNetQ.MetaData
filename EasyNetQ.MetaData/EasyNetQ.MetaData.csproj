@@ -1,81 +1,39 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B091FC31-0542-41A5-8384-8169D6C55F37}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EasyNetQ.MetaData</RootNamespace>
-    <AssemblyName>EasyNetQ.MetaData</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\EasyNetQ.MetaData.XML</DocumentationFile>
+
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <Description>An extension to EasyNetQ that allows you to utilize message headers, without resorting to AdvancedBus!</Description>
+    <Authors>MattDavey</Authors>
+    <PackageTags>amqp;rabbitmq;easynetq;header;metadata</PackageTags>
+    <RepositoryUrl>https://github.com/Matthew-Davey/EasyNetQ.MetaData.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Copyright>© Matt Davey 2015-2018</Copyright>
+    <PackageProjectUrl>https://github.com/Matthew-Davey/EasyNetQ.MetaData</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/Matthew-Davey/EasyNetQ.MetaData/blob/develop/LICENSE</PackageLicenseUrl>
+    <PackageReleaseNotes>
+      * Upgrade project to netstandard2.0
+      * Upgrade to EasyNetQ 3.1.0
+    </PackageReleaseNotes>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\EasyNetQ.MetaData.XML</DocumentationFile>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\EasyNetQ.MetaData.xml</DocumentationFile>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\EasyNetQ.MetaData.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="EasyNetQ, Version=0.50.7.399, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EasyNetQ.0.50.7.399\lib\net40\EasyNetQ.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="RabbitMQ.Client, Version=3.5.4.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
-      <HintPath>..\packages\RabbitMQ.Client.3.5.4\lib\net40\RabbitMQ.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="EasyNetQ" Version="3.1.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\AssemblyVersion.cs">
-      <Link>Properties\AssemblyVersion.cs</Link>
-    </Compile>
-    <Compile Include="Bindings\ContentEncodingBinding.cs" />
-    <Compile Include="Bindings\ContentTypeBinding.cs" />
-    <Compile Include="Bindings\CorrelationIdBinding.cs" />
-    <Compile Include="Bindings\DeliveryModeBinding.cs" />
-    <Compile Include="Bindings\ExpirationBinding.cs" />
-    <Compile Include="Bindings\HeaderBinding.cs" />
-    <Compile Include="Bindings\MessageIdBinding.cs" />
-    <Compile Include="Bindings\PriorityBinding.cs" />
-    <Compile Include="Bindings\ReplyToBinding.cs" />
-    <Compile Include="Bindings\TimestampBinding.cs" />
-    <Compile Include="DateTimeExtensions.cs" />
-    <Compile Include="IMetaDataBinding.cs" />
-    <Compile Include="MetaDataMessageSerializationStrategy.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceRegisterExtensions.cs" />
+    <ProjectReference Include="..\EasyNetQ.MetaData.Abstractions\EasyNetQ.MetaData.Abstractions.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\EasyNetQ.MetaData.Abstractions\EasyNetQ.MetaData.Abstractions.csproj">
-      <Project>{524533d8-62dd-4235-92d4-85d716a399bb}</Project>
-      <Name>EasyNetQ.MetaData.Abstractions</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>

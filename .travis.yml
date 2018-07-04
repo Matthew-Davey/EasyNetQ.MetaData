@@ -5,4 +5,4 @@ dotnet: 2.0.0
 install:
     - bundle install
 script:
-    - bundle exec rake build CONFIGURATION=Release
+    - bundle exec rake build CONFIGURATION=Release VERBOSITY=normal

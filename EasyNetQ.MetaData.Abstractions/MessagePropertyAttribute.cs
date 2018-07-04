@@ -8,11 +8,6 @@
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class MessagePropertyAttribute : Attribute {
         /// <summary>
-        /// Gets or sets the message attribute that the property will be bound to.
-        /// </summary>
-        public Property Property { get; private set; }
-
-        /// <summary>
         /// Initializes a new instances of the <see cref="MessagePropertyAttribute"/> class.
         /// </summary>
         /// <param name="property">The message attribute that the property will bind to.</param>
@@ -25,5 +20,10 @@
 
             Property = property;
         }
+
+        /// <summary>
+        /// Gets or sets the message attribute that the property will be bound to.
+        /// </summary>
+        public Property Property { get; private set; }
     }
 }

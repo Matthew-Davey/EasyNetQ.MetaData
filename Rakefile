@@ -1,97 +1,40 @@
-require 'rubygems'
-require 'bundler/setup'
-require 'albacore'
-require 'albacore/tasks/versionizer'
+require "rubygems"
+require "bundler/setup"
+require "semver"
 
-task :default => [:clean, :version, :build]
+@build_configuration = ENV["CONFIGURATION"] || "Release"
+@verbosity = ENV["VERBOSITY"] || "detailed"
+@semver = SemVer.find
 
-desc 'Clean up the working folder, deletes bin and obj'
-build :clean do |build|
-  rm_rf 'pkg'
-  build.nologo
-  build.sln = 'EasyNetQ.MetaData.sln'
-  build.target = [ :Clean ]
-  build.prop 'configuration', build_configuration
-  build.logging = 'detailed'
+desc "Writes the semantic version of the project to stdout"
+task :semver do
+	puts(@semver.to_s)
 end
 
-desc 'Extract version information from .semver'
-Albacore::Tasks::Versionizer.new :read_semver
-
-desc 'Writes out the AssemblyVersion file'
-asmver :version => [:read_semver] do |file|
-  file.file_path = './AssemblyVersion.cs'
-  file.attributes assembly_version: ENV['FORMAL_VERSION'],
-    assembly_file_version: ENV['BUILD_VERSION'],
-    assembly_informational_version: ENV['NUGET_VERSION']
+desc "Clean up the working folder"
+task :clean do
+	sh "dotnet clean --verbosity #{@verbosity} --configuration #{@build_configuration}"
 end
 
-desc 'Restores missing nuget packages'
-nugets_restore :package_restore do |nuget|
-    nuget.out = 'packages'
-    nuget.nuget_gem_exe
+desc "Restore missing nuget packages"
+task :package_restore do
+	sh "dotnet restore --verbosity #{@verbosity}"
 end
 
-desc 'Executes msbuild/xbuild against the project file'
-build :build => [:clean, :version, :package_restore] do |build|
-  build.nologo
-  build.sln = 'EasyNetQ.MetaData.sln'
-  build.target = [ :Build ]
-  build.prop 'configuration', build_configuration
-  build.logging = 'detailed'
-  build.add_parameter '/consoleloggerparameters:PerformanceSummary;Summary;ShowTimestamp'
+desc "Executes dotnet build in the project root folder"
+task :build => [:clean, :package_restore] do
+	sh "dotnet build --verbosity #{@verbosity} --configuration #{@build_configuration} --no-restore /p:Version=#{@semver.format "%M.%m.%p"}"
 end
 
-desc 'Writes out the nuget package for the core assembly'
-nugets_pack :package_core => [:build] do |nuget|
-  Dir.mkdir('pkg') unless Dir.exist?('pkg')
-  nuget.configuration = build_configuration
-  nuget.files = FileList['EasyNetQ.MetaData/EasyNetQ.MetaData.csproj']
-  nuget.out = 'pkg'
-  nuget.nuget_gem_exe
-  nuget.with_metadata do |meta|
-    meta.version = ENV['NUGET_VERSION']
-    meta.authors = 'Matt Davey'
-    meta.description = 'An extension to EasyNetQ that allows you to utilize message headers, without resorting to AdvancedBus!'
-    meta.project_url = 'https://github.com/Matthew-Davey/EasyNetQ.MetaData'
-    meta.tags = 'amqp rabbitmq easynetq header'
-	meta.add_dependency "EasyNetQ.MetaData.Abstractions", "#{ENV['NUGET_VERSION']}"
-  end
+desc "Builds nuget packages for any project which is configured to generate a nuget package"
+task :package => [:build] do
+	Dir.mkdir("pkg") unless Dir.exist?("pkg")
+	sh "dotnet pack --configuration #{@build_configuration} --no-build --no-restore --verbosity #{@verbosity} /p:Version=#{@semver.format "%M.%m.%p"} --output ../pkg"
 end
 
-desc 'Writes out the nuget package for the abstractions assembly'
-nugets_pack :package_abstractions => [:build] do |nuget|
-  Dir.mkdir('pkg') unless Dir.exist?('pkg')
-  nuget.configuration = build_configuration
-  nuget.files = FileList['EasyNetQ.MetaData.Abstractions/EasyNetQ.MetaData.Abstractions.csproj']
-  nuget.out = 'pkg'
-  nuget.nuget_gem_exe
-  nuget.with_metadata do |meta|
-    meta.version = ENV['NUGET_VERSION']
-    meta.authors = 'Matt Davey'
-    meta.description = 'An extension to EasyNetQ that allows you to utilize message headers, without resorting to AdvancedBus!'
-    meta.project_url = 'https://github.com/Matthew-Davey/EasyNetQ.MetaData'
-    meta.tags = 'amqp rabbitmq easynetq header'
-  end
+desc "Publishes the nuget package(s) to the Nuget repository"
+task :publish => [:package] do
+	sh "dotnet nuget push ./artifacts/*.nupkg --source #{ENV["NUGET_FEED_URL"]} --api-key #{ENV["NUGET_API_KEY"]}"
 end
 
-desc 'Writes out the nuget packages for the current version'
-task :package => [:package_core, :package_abstractions]
-
-task :publish_core => [:package] do
-  package = "pkg/EasyNetQ.MetaData.#{ENV['NUGET_VERSION']}.nupkg"
-  nuget = Albacore::Nugets::find_nuget_gem_exe
-  system("#{nuget} push #{package} #{ENV['NUGET_API_KEY']} -NonInteractive -Verbosity detailed")
-end
-
-task :publish_abstractions => [:package] do
-  package = "pkg/EasyNetQ.MetaData.Abstractions.#{ENV['NUGET_VERSION']}.nupkg"
-  nuget = Albacore::Nugets::find_nuget_gem_exe
-  system("#{nuget} push #{package} #{ENV['NUGET_API_KEY']} -NonInteractive -Verbosity detailed")
-end
-
-task :publish => [:publish_core, :publish_abstractions]
-
-def build_configuration
-  return ENV['configuration'] || 'Debug'
-end
+task :default => [:build]

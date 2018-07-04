@@ -1,5 +1,6 @@
 namespace EasyNetQ.MetaData {
     using System;
+    using EasyNetQ.DI;
 
     /// <summary>
     /// Defines extension methods for the <see cref="IServiceRegister"/> interface.

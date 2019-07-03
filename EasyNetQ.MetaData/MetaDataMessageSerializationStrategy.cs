@@ -45,15 +45,6 @@
             return MessageFactory.CreateInstance(messageType, messageBody, properties);
         }
 
-        public IMessage<T> DeserializeMessage<T>(MessageProperties properties, Byte[] body) where T : class {
-            var messageBody = _serializer.BytesToMessage<T>(body);
-
-            _bindingCache.GetOrAdd(typeof(T), ScanForBindings)
-                .ForEach(binding => binding.FromMessageMetaData(properties, messageBody));
-
-            return new Message<T>(messageBody, properties);
-        }
-
         public SerializedMessage SerializeMessage(IMessage message) {
             var messageBody = message.GetBody();
             var messageProperties = message.Properties;
@@ -69,7 +60,7 @@
             if (String.IsNullOrEmpty(messageProperties.CorrelationId))
                 messageProperties.CorrelationId = _correlationIdGenerator.GetCorrelationId();
 
-            var messageBytes = _serializer.MessageToBytes(messageBody);
+            var messageBytes = _serializer.MessageToBytes(message.MessageType, messageBody);
             return new SerializedMessage(messageProperties, messageBytes);
         }
 

@@ -74,14 +74,14 @@
         }
 
         static IEnumerable<IMetaDataBinding> MakeBindings(PropertyInfo property) {
-            var messageHeaderAttribute = property.GetCustomAttribute<MessageHeaderAttribute>();
+            var messageHeaderAttribute = property.GetCustomAttribute<MessageHeaderAttribute>(true);
 
             if (messageHeaderAttribute != null) {
                 yield return new HeaderBinding(property, messageHeaderAttribute.Key);
                 yield break;
             }
 
-            var messagePropertyAttribute = property.GetCustomAttribute<MessagePropertyAttribute>();
+            var messagePropertyAttribute = property.GetCustomAttribute<MessagePropertyAttribute>(true);
 
             if (messagePropertyAttribute != null && _bindingBuilders.ContainsKey(messagePropertyAttribute.Property)) {
                 yield return _bindingBuilders[messagePropertyAttribute.Property].Invoke(property);
